@@ -124,7 +124,7 @@ pub fn search<S: Into<String>>(search: S) -> SearchQuery {
 
 /// Represents a query being bulit for OMDb.
 /// Follows the Builder pattern.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct FindQuery {
     // One required
     imdb_id: Option<String>,
@@ -136,19 +136,6 @@ pub struct FindQuery {
     kind: Option<Kind>,
     year: Option<String>,
     plot: Option<Plot>, // TODO: Season and Episode
-}
-
-impl Default for FindQuery {
-    fn default() -> FindQuery {
-        FindQuery {
-            imdb_id: None,
-            title: None,
-            apikey: None,
-            kind: None,
-            year: None,
-            plot: None,
-        }
-    }
 }
 
 impl FindQuery {
@@ -221,7 +208,7 @@ impl FindQuery {
 
 /// Represents a query being bulit for OMDb.
 /// Follows the Builder pattern.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct SearchQuery {
     search: String,
     apikey: Option<String>,
@@ -230,18 +217,6 @@ pub struct SearchQuery {
     kind: Option<Kind>,
     year: Option<String>,
     page: Option<usize>,
-}
-
-impl Default for SearchQuery {
-    fn default() -> SearchQuery {
-        SearchQuery {
-            search: String::new(),
-            apikey: None,
-            kind: None,
-            year: None,
-            page: None,
-        }
-    }
 }
 
 impl SearchQuery {
