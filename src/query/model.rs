@@ -71,10 +71,7 @@ impl From<FindResponse> for Movie {
             imdb_votes: find.imdb_votes.unwrap_or_default(),
             imdb_id: find.imdb_id.unwrap_or_default(),
             kind: match find.kind {
-                Some(kind_string) => match Kind::from_str(&kind_string) {
-                    Some(kind) => kind,
-                    None => Kind::Movie,
-                },
+                Some(kind_string) => Kind::from_str(&kind_string).unwrap_or(Kind::Movie),
                 None => Kind::Movie,
             },
         }
@@ -134,10 +131,7 @@ impl From<SearchResponseMovie> for SearchResultsMovie {
             poster: srm.poster.unwrap_or_default(),
             imdb_id: srm.imdb_id.unwrap_or_default(),
             kind: match srm.kind {
-                Some(kind_string) => match Kind::from_str(&kind_string) {
-                    Some(kind) => kind,
-                    None => Kind::Movie,
-                },
+                Some(kind_string) => Kind::from_str(&kind_string).unwrap_or(Kind::Movie),
                 None => Kind::Movie,
             },
         }
