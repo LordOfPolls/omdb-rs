@@ -1,3 +1,4 @@
+use chrono::NaiveDate;
 use crate::{Kind, Movie, SearchResults, SearchResultsMovie};
 use serde::Deserialize;
 
@@ -5,10 +6,8 @@ use serde::Deserialize;
 pub struct FindResponse {
     #[serde(rename = "Response")]
     pub response: String,
-
     #[serde(rename = "Error")]
     pub error: Option<String>,
-
     #[serde(rename = "Title")]
     pub title: Option<String>,
     #[serde(rename = "Year")]
@@ -17,6 +16,8 @@ pub struct FindResponse {
     pub rated: Option<String>,
     #[serde(rename = "Released")]
     pub released: Option<String>,
+    #[serde(rename = "DVD")]
+    pub dvd: Option<String>,
     #[serde(rename = "Runtime")]
     pub runtime: Option<String>,
     #[serde(rename = "Genre")]
@@ -55,19 +56,26 @@ impl From<FindResponse> for Movie {
             title: find.title.unwrap_or_default(),
             year: find.year.unwrap_or_default(),
             rated: find.rated.unwrap_or_default(),
-            released: find.released.unwrap_or_default(),
+            released: NaiveDate::parse_from_str(
+                &find.released.clone().unwrap_or_default(),
+                "%d %B %Y",
+            ).unwrap_or(NaiveDate::from_ymd_opt(1970, 1, 1).unwrap()),
+            dvd: NaiveDate::parse_from_str(
+                &find.released.unwrap_or_default(),
+                "%d %B %Y",
+            ).unwrap_or(NaiveDate::from_ymd_opt(1970, 1, 1).unwrap()),
             runtime: find.runtime.unwrap_or_default(),
             genre: find.genre.unwrap_or_default(),
             director: find.director.unwrap_or_default(),
-            writer: find.writer.unwrap_or_default(),
-            actors: find.actors.unwrap_or_default(),
+            writer: find.writer.unwrap_or_default().split(", ").map(|s| s.to_string()).collect(),
+            actors: find.actors.unwrap_or_default().split(", ").map(|s| s.to_string()).collect(),
             plot: find.plot.unwrap_or_default(),
             language: find.language.unwrap_or_default(),
             country: find.country.unwrap_or_default(),
             awards: find.awards.unwrap_or_default(),
             poster: find.poster.unwrap_or_default(),
-            metascore: find.metascore.unwrap_or_default(),
-            imdb_rating: find.imdb_rating.unwrap_or_default(),
+            metascore: find.metascore.unwrap_or_default().parse::<u8>().unwrap_or_default(),
+            imdb_rating: find.imdb_rating.unwrap_or_default().parse::<f32>().unwrap_or_default(),
             imdb_votes: find.imdb_votes.unwrap_or_default(),
             imdb_id: find.imdb_id.unwrap_or_default(),
             kind: match find.kind {

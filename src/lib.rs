@@ -11,25 +11,28 @@ pub use query::imdb_id;
 pub use query::search;
 pub use query::title;
 
+use chrono::NaiveDate;
+
 /// A movie, series, episode, or game from OMDb.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Movie {
     pub title: String,
     pub year: String,
     pub rated: String,
-    pub released: String,
+    pub released: NaiveDate,
+    pub dvd: NaiveDate,
     pub runtime: String,
     pub genre: String,
     pub director: String,
-    pub writer: String,
-    pub actors: String,
+    pub writer: Vec<String>,
+    pub actors: Vec<String>,
     pub plot: String,
     pub language: String,
     pub country: String,
     pub awards: String,
     pub poster: String,
-    pub metascore: String,
-    pub imdb_rating: String,
+    pub metascore: u8,
+    pub imdb_rating: f32,
     pub imdb_votes: String,
     pub imdb_id: String,
     pub kind: Kind,
